@@ -31,18 +31,14 @@ export function Resizable() {
               <h1 className="text-xl font-semibold border-b p-2 mb-3">
                 Response
               </h1>
-              {typeof response === 'object' ? (
-                <JsonView
-                  className="h-full w-full"
-                  displaySize="expanded"
-                  src={response}
-                />
-              ) : (
-                <div className="h-full w-full">{response}</div>
-              )}
+              <JsonView
+                className="h-full w-full"
+                displaySize="expanded"
+                src={response}
+              />
             </div>
           ) : (
-            <div className="">Right Panel</div>
+            <div className="font-medium text-lg">Response Console</div>
           )}
         </div>
       </ResizablePanel>
