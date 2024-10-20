@@ -37,7 +37,7 @@ router.post('/combine_rules', async (req, res) => {
 
   try {
     const combinedAST = combine_rules(rule_strings);
-
+    console.log(combinedAST);
     // Create and save the combined rule in the database
     const newRule = new Rule({ name, ast: combinedAST });
     await newRule.save();
@@ -51,18 +51,15 @@ router.post('/combine_rules', async (req, res) => {
 
 // POST: /evaluate_rule - Evaluate the rule against user data
 router.post('/evaluate_rule', async (req, res) => {
-  const { ruleId, userData } = req.body;
+  const { rule_string, userData } = req.body;
 
   try {
-    // Find the rule by ID
-    const rule = await Rule.findById(ruleId);
-    if (!rule) {
-      return res.status(404).json({ error: 'Rule not found' });
-    }
-
     // Evaluate the AST of the rule with the given user data
-    const result = evaluateAST(rule.ast, userData);
-
+    const parsed = JSON.parse(rule_string);
+    console.log(parsed.ast);
+    console.log(userData);
+    const result = evaluateAST(parsed.ast, userData);
+    console.log(result);
     // Return the evaluation result (true/false)
     res.status(200).json({ result });
   } catch (error) {
