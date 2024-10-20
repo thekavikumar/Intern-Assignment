@@ -18,12 +18,53 @@ import {
 import { toast } from '@/hooks/use-toast';
 import { Input } from './ui/input';
 
+function validateRuleString(ruleString: string) {
+  const operatorRegex = /[=><!]/; // Ensure the rule contains a comparison operator
+  const comparisonRegex = /\b\d+\b/; // Ensure it has at least one number (for comparison)
+  const allowedCharactersRegex = /^[a-zA-Z0-9\s=><!()]+$/; // Allowed characters
+
+  console.log('Validating rule string:', ruleString);
+
+  // Check if the rule is empty or contains only whitespace
+  if (!ruleString.trim()) {
+    throw new Error('Rule cannot be empty.');
+  }
+
+  // Check for allowed characters
+  if (!allowedCharactersRegex.test(ruleString)) {
+    throw new Error(
+      'Rule contains invalid characters. Allowed: letters, numbers, spaces, =, >, <, !, (, and ).'
+    );
+  }
+
+  // Check for comparison operator
+  if (!operatorRegex.test(ruleString)) {
+    throw new Error(
+      'Rule must contain a comparison operator (e.g., =, >, <, !=).'
+    );
+  }
+
+  // Check for valid comparison value
+  if (!comparisonRegex.test(ruleString)) {
+    throw new Error(
+      'Rule must contain a valid comparison value (e.g., a number).'
+    );
+  }
+
+  // Check for matching parentheses if you allow nested expressions
+  const openBrackets = (ruleString.match(/\(/g) || []).length;
+  const closeBrackets = (ruleString.match(/\)/g) || []).length;
+  if (openBrackets !== closeBrackets) {
+    throw new Error('Mismatched parentheses in the rule.');
+  }
+}
+
 const CreateRuleFormSchema = z.object({
   name: z.string().min(3, {
     message: 'Name must be at least 3 characters.',
   }),
-  rule: z.string().min(10, {
-    message: 'Rule must be at least 10 characters.',
+  rule: z.string().min(3, {
+    message: 'Rule must be at least 3 characters.',
   }),
 });
 
@@ -68,6 +109,10 @@ export function LeftView({
   ) {
     try {
       // Send POST request to Next.js API route
+
+      // Validate the rule string
+      validateRuleString(data.rule);
+
       const response = await fetch('/api/create_rule', {
         method: 'POST',
         headers: {
@@ -92,11 +137,11 @@ export function LeftView({
       // console.log(parsedResponse);
       // Update response in the right panel of the UI
       setResponse(responseData);
-    } catch {
+    } catch (err) {
       // Handle errors
       toast({
         title: 'Error',
-        description: 'There was an issue creating the rule. Please try again.',
+        description: String(err),
         variant: 'destructive',
       });
     }
@@ -194,11 +239,11 @@ export function LeftView({
       // console.log(parsedResponse);
       // Update response in the right panel of the UI
       setResponse(responseData);
-    } catch {
+    } catch (error) {
       // Handle errors
       toast({
         title: 'Error',
-        description: 'There was an issue creating the rule. Please try again.',
+        description: String(error),
         variant: 'destructive',
       });
     }

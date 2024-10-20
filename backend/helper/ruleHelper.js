@@ -80,6 +80,12 @@ function evaluateOperand(operand, userData) {
       return userValue > value;
     case '<':
       return userValue < value;
+    case '>=':
+      return userValue >= value;
+    case '<=':
+      return userValue <= value;
+    case '!=':
+      return userValue != value; // Can handle both string and number comparison
     case '=':
       return userValue == value; // Can handle both string and number comparison
     default:
