@@ -7,7 +7,7 @@ dotenv.config();
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      'mongodb://admin:password@localhost:27017/rule-engine?authSource=admin',
+      'mongodb://admin:password@mongodb:27017/rule-engine?authSource=admin',
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,

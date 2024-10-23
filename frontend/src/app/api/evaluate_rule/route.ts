@@ -6,7 +6,7 @@ export async function POST(request: Request) {
 
     // Forward the request to the backend at localhost:5000
     const backendResponse = await fetch(
-      'http://localhost:5000/api/rules/evaluate_rule',
+      'http://backend:5000/api/rules/evaluate_rule',
       {
         method: 'POST',
         headers: {

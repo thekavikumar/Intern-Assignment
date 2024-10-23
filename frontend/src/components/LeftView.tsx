@@ -21,7 +21,7 @@ import { Input } from './ui/input';
 function validateRuleString(ruleString: string) {
   const operatorRegex = /[=><!]/; // Ensure the rule contains a comparison operator
   const comparisonRegex = /\b\d+\b/; // Ensure it has at least one number (for comparison)
-  const allowedCharactersRegex = /^[a-zA-Z0-9\s=><!()]+$/; // Allowed characters
+  const allowedCharactersRegex = /^[a-zA-Z0-9\s=><!()'"]+$/; // Allowed characters
 
   console.log('Validating rule string:', ruleString);
 

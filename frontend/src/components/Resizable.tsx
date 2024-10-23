@@ -10,8 +10,7 @@ import JsonView from 'react18-json-view';
 import 'react18-json-view/src/style.css';
 
 export function Resizable() {
-  const [response, setResponse] = useState<string | null>(null);
-  // console.log(response);
+  const [response, setResponse] = useState<any | null>(null); // Changed to 'any' for more flexibility
 
   return (
     <ResizablePanelGroup

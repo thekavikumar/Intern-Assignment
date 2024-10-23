@@ -67,4 +67,22 @@ router.post('/evaluate_rule', async (req, res) => {
   }
 });
 
+// update rule with id
+router.put('update/:id', async (req, res) => {
+  const { name, ast } = req.body;
+  const { id } = req.params;
+  try {
+    const rule = await Rule.findById(id);
+    if (!rule) {
+      return res.status(404).json({ error: 'Rule not found' });
+    }
+    rule.name = name;
+    rule.ast = ast;
+    await rule.save();
+    res.status(200).json(rule);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating the rule' });
+  }
+});
+
 module.exports = router;
